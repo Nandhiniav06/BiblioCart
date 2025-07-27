@@ -18,7 +18,7 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Connect to MongoDB Atlas
-mongoose.connect('mongodb+srv://bookstoreapp:123@bookstorecluster.jo1zigi.mongodb.net/bookstore?retryWrites=true&w=majority&appName=BookstoreCluster', {
+mongoose.connect('MONGO_URI=mongodb+srv://<username>:<password>@cluster0.mongodb.net/bookstore?retryWrites=true&w=majority', {
     useNewUrlParser: true,
     useUnifiedTopology: true
 })
