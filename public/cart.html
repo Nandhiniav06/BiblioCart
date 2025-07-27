@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - PageTurner</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4a6fa5;
+            --primary-dark: #3a5a8a;
+            --secondary: #f8b400;
+            --danger: #dc3545;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --border-radius: 8px;
+            --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--dark);
+            background-color: #f5f7fa;
+            padding-top: 80px;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+
+        /* Header */
+        .navbar {
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 15px 0;
+        }
+
+        .brand-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .nav-link {
+            font-weight: 500;
+            color: var(--dark);
+            padding: 8px 15px;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+            background-color: rgba(74, 111, 165, 0.1);
+        }
+
+        .nav-link.active {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 60px 0 40px;
+            margin-bottom: 40px;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .breadcrumb {
+            background-color: transparent;
+            padding: 0;
+        }
+
+        .breadcrumb-item a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .breadcrumb-item a:hover {
+            color: white;
+        }
+
+        .breadcrumb-item.active {
+            color: white;
+        }
+
+        .breadcrumb-item + .breadcrumb-item::before {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Cart Content */
+        .cart-content {
+            padding: 40px 0;
+        }
+
+        .cart-items {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 25px;
+        }
+
+        .cart-item {
+            display: flex;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--light-gray);
+            transition: var(--transition);
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .cart-item:hover {
+            background-color: rgba(0, 0, 0, 0.01);
+        }
+
+        .cart-item-img {
+            width: 120px;
+            height: 160px;
+            flex-shrink: 0;
+            margin-right: 20px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .cart-item-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .cart-item-details {
+            flex-grow: 1;
+        }
+
+        .cart-item-title {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+            color: var(--dark);
+        }
+
+        .cart-item-author {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .cart-item-price {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+
+        .cart-item-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            border: 1px solid var(--light-gray);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+
+        .quantity-btn {
+            background-color: var(--light);
+            border: none;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .quantity-btn:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .quantity-input {
+            width: 40px;
+            text-align: center;
+            border: none;
+            outline: none;
+            font-weight: 500;
+        }
+
+        .btn-remove {
+            background-color: transparent;
+            color: var(--danger);
+            border: none;
+            font-weight: 500;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-remove:hover {
+            color: #c82333;
+        }
+
+        /* Cart Summary */
+        .cart-summary {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 25px;
+            position: sticky;
+            top: 100px;
+        }
+
+        .summary-title {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .summary-total {
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin: 20px 0;
+            padding-top: 10px;
+            border-top: 1px solid var(--light-gray);
+        }
+
+        .btn-checkout {
+            width: 100%;
+            padding: 12px;
+            font-weight: 600;
+            background-color: var(--primary);
+            border: none;
+            transition: var(--transition);
+        }
+
+        .btn-checkout:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Empty State */
+        .empty-state {
+            padding: 60px 0;
+            text-align: center;
+        }
+
+        .empty-state-icon {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 20px;
+            opacity: 0.7;
+        }
+
+        .empty-state h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        .empty-state p {
+            color: var(--gray);
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 60px 0 0;
+        }
+
+        .footer-title {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background-color: var(--secondary);
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: #adb5bd;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: white;
+            padding-left: 5px;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-icons a {
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .social-icons a:hover {
+            background-color: var(--secondary);
+            color: var(--dark);
+            transform: translateY(-3px);
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: 10px;
+        }
+
+        .newsletter-form input {
+            flex-grow: 1;
+            border-radius: var(--border-radius);
+            border: none;
+            padding: 10px 15px;
+        }
+
+        .newsletter-form button {
+            border-radius: var(--border-radius);
+        }
+
+        .footer-bottom {
+            padding: 20px 0;
+            margin-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            color: #adb5bd;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 991.98px) {
+            .cart-item-img {
+                width: 100px;
+                height: 140px;
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .cart-item {
+                flex-direction: column;
+            }
+
+            .cart-item-img {
+                width: 100%;
+                height: 200px;
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+
+            .cart-item-actions {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .newsletter-form {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            .page-header {
+                padding: 40px 0 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top">
+            <div class="container">
+                <a class="navbar-brand" href="/">
+                    <span class="brand-text">PageTurner</span>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/"><i class="fas fa-home me-1"></i> Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/wishlist.html"><i class="fas fa-heart me-1"></i> Wishlist</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="/cart.html"><i class="fas fa-shopping-cart me-1"></i> Cart</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1><i class="fas fa-shopping-cart text-white me-2"></i> Shopping Cart</h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Cart</li>
+                </ol>
+            </nav>
+        </div>
+    </section>
+
+    <!-- Cart Content -->
+    <section class="cart-content">
+        <div class="container">
+            <div id="cart-container" class="row">
+                <div class="col-lg-8">
+                    <div id="cart-items" class="cart-items">
+                        <!-- Cart items will be displayed here -->
+                        <div class="cart-item">
+                            <div class="cart-item-img">
+                                <img src="https://images-na.ssl-images-amazon.com/images/I/51Ga5GuElyL._AC_SX184_.jpg" alt="The Midnight Library">
+                            </div>
+                            <div class="cart-item-details">
+                                <h3 class="cart-item-title">The Midnight Library</h3>
+                                <p class="cart-item-author">Matt Haig</p>
+                                <div class="cart-item-price">$14.99</div>
+                                <div class="cart-item-actions">
+                                    <div class="quantity-selector">
+                                        <button class="quantity-btn minus">-</button>
+                                        <input type="number" class="quantity-input" value="1" min="1">
+                                        <button class="quantity-btn plus">+</button>
+                                    </div>
+                                    <button class="btn-remove">
+                                        <i class="fas fa-trash"></i> Remove
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="cart-item">
+                            <div class="cart-item-img">
+                                <img src="https://images-na.ssl-images-amazon.com/images/I/41SYoqJn-CL._AC_SX184_.jpg" alt="Atomic Habits">
+                            </div>
+                            <div class="cart-item-details">
+                                <h3 class="cart-item-title">Atomic Habits</h3>
+                                <p class="cart-item-author">James Clear</p>
+                                <div class="cart-item-price">$11.99</div>
+                                <div class="cart-item-actions">
+                                    <div class="quantity-selector">
+                                        <button class="quantity-btn minus">-</button>
+                                        <input type="number" class="quantity-input" value="1" min="1">
+                                        <button class="quantity-btn plus">+</button>
+                                    </div>
+                                    <button class="btn-remove">
+                                        <i class="fas fa-trash"></i> Remove
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div id="cart-summary" class="cart-summary">
+                        <h3 class="summary-title">Order Summary</h3>
+                        <div class="summary-row">
+                            <span>Subtotal (2 items)</span>
+                            <span>$26.98</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Shipping</span>
+                            <span>Free</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Tax</span>
+                            <span>$2.16</span>
+                        </div>
+                        <div class="summary-row summary-total">
+                            <span>Total</span>
+                            <span>$29.14</span>
+                        </div>
+                        <button class="btn btn-primary btn-checkout">
+                            Proceed to Checkout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Empty Cart Template -->
+    <template id="empty-cart-template">
+        <div class="col-12 text-center empty-state">
+            <img src="https://cdn-icons-png.flaticon.com/512/2038/2038854.png" alt="Empty Cart" class="empty-state-icon">
+            <h3>Your cart is empty</h3>
+            <p>Add some books to your cart to begin shopping.</p>
+            <a href="/" class="btn btn-primary">Shop Now</a>
+        </div>
+    </template>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h3 class="footer-title">PageTurner</h3>
+                    <p>Your destination for quality books and excellent reading experiences.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <h3 class="footer-title">Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/wishlist.html">Wishlist</a></li>
+                        <li><a href="/cart.html">Cart</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-5">
+                    <h3 class="footer-title">Newsletter</h3>
+                    <p>Subscribe to our newsletter for updates on new arrivals and special offers.</p>
+                    <div class="newsletter-form">
+                        <input type="email" class="form-control" placeholder="Your email">
+                        <button class="btn btn-primary">Subscribe</button>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 PageTurner. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Quantity selector functionality
+            document.querySelectorAll('.quantity-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const input = this.parentElement.querySelector('.quantity-input');
+                    let value = parseInt(input.value);
+                    
+                    if (this.classList.contains('minus') && value > 1) {
+                        input.value = value - 1;
+                    } else if (this.classList.contains('plus')) {
+                        input.value = value + 1;
+                    }
+                    
+                    // In a real app, you would update the cart total here
+                });
+            });
+
+            // Remove item functionality
+            document.querySelectorAll('.btn-remove').forEach(button => {
+                button.addEventListener('click', function() {
+                    const cartItem = this.closest('.cart-item');
+                    cartItem.style.opacity = '0';
+                    setTimeout(() => {
+                        cartItem.remove();
+                        
+                        // Check if cart is empty
+                        if (document.querySelectorAll('.cart-item').length === 0) {
+                            const emptyTemplate = document.getElementById('empty-cart-template');
+                            const emptyContent = emptyTemplate.content.cloneNode(true);
+                            document.getElementById('cart-items').appendChild(emptyContent);
+                            document.getElementById('cart-summary').style.display = 'none';
+                        } else {
+                            // In a real app, you would update the cart summary here
+                        }
+                    }, 300);
+                });
+            });
+
+            // In a real app, you would load cart items from your backend here
+            // and handle all the calculations for the summary
+        });
+    </script>
+</body>
+</html>

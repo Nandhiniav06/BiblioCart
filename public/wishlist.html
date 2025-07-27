@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Wishlist - PageTurner</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4a6fa5;
+            --primary-dark: #3a5a8a;
+            --secondary: #f8b400;
+            --danger: #dc3545;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --border-radius: 8px;
+            --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--dark);
+            background-color: #f5f7fa;
+            padding-top: 80px;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+
+        /* Header */
+        .navbar {
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 15px 0;
+        }
+
+        .brand-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .nav-link {
+            font-weight: 500;
+            color: var(--dark);
+            padding: 8px 15px;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+            background-color: rgba(74, 111, 165, 0.1);
+        }
+
+        .nav-link.active {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 60px 0 40px;
+            margin-bottom: 40px;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .breadcrumb {
+            background-color: transparent;
+            padding: 0;
+        }
+
+        .breadcrumb-item a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .breadcrumb-item a:hover {
+            color: white;
+        }
+
+        .breadcrumb-item.active {
+            color: white;
+        }
+
+        .breadcrumb-item + .breadcrumb-item::before {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Wishlist Content */
+        .wishlist-content {
+            padding: 40px 0;
+        }
+
+        .wishlist-item {
+            background-color: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+            margin-bottom: 30px;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .wishlist-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .wishlist-item-img {
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .wishlist-item-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .wishlist-item:hover .wishlist-item-img img {
+            transform: scale(1.05);
+        }
+
+        .wishlist-item-body {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .wishlist-item-title {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+            color: var(--dark);
+        }
+
+        .wishlist-item-author {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .wishlist-item-price {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+
+        .wishlist-item-actions {
+            margin-top: auto;
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-wishlist {
+            background-color: var(--danger);
+            color: white;
+            border: none;
+            font-weight: 500;
+        }
+
+        .btn-wishlist:hover {
+            background-color: #c82333;
+            color: white;
+        }
+
+        .btn-cart {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            font-weight: 500;
+        }
+
+        .btn-cart:hover {
+            background-color: var(--primary-dark);
+            color: white;
+        }
+
+        /* Empty State */
+        .empty-state {
+            padding: 60px 0;
+        }
+
+        .empty-state-icon {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 20px;
+            opacity: 0.7;
+        }
+
+        .empty-state h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        .empty-state p {
+            color: var(--gray);
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 60px 0 0;
+        }
+
+        .footer-title {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background-color: var(--secondary);
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: #adb5bd;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: white;
+            padding-left: 5px;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-icons a {
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .social-icons a:hover {
+            background-color: var(--secondary);
+            color: var(--dark);
+            transform: translateY(-3px);
+        }
+
+        .newsletter-form {
+            display: flex;
+            gap: 10px;
+        }
+
+        .newsletter-form input {
+            flex-grow: 1;
+            border-radius: var(--border-radius);
+            border: none;
+            padding: 10px 15px;
+        }
+
+        .newsletter-form button {
+            border-radius: var(--border-radius);
+        }
+
+        .footer-bottom {
+            padding: 20px 0;
+            margin-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            color: #adb5bd;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 767.98px) {
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .newsletter-form {
+                flex-direction: column;
+            }
+
+            .wishlist-item {
+                flex-direction: row;
+                height: auto;
+            }
+
+            .wishlist-item-img {
+                width: 120px;
+                height: auto;
+            }
+
+            .wishlist-item-actions {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            .wishlist-item {
+                flex-direction: column;
+            }
+
+            .wishlist-item-img {
+                width: 100%;
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top">
+            <div class="container">
+                <a class="navbar-brand" href="/">
+                    <span class="brand-text">PageTurner</span>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/"><i class="fas fa-home me-1"></i> Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="/wishlist.html"><i class="fas fa-heart me-1"></i> Wishlist</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/cart.html"><i class="fas fa-shopping-cart me-1"></i> Cart</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1><i class="fas fa-heart text-white me-2"></i> My Wishlist</h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Wishlist</li>
+                </ol>
+            </nav>
+        </div>
+    </section>
+
+    <!-- Wishlist Content -->
+    <section class="wishlist-content">
+        <div class="container">
+            <div id="wishlist-items" class="row">
+                <!-- Wishlist items will be displayed here -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="wishlist-item">
+                        <div class="wishlist-item-img">
+                            <img src="https://images-na.ssl-images-amazon.com/images/I/51Ga5GuElyL._AC_SX184_.jpg" alt="The Midnight Library">
+                        </div>
+                        <div class="wishlist-item-body">
+                            <h3 class="wishlist-item-title">The Midnight Library</h3>
+                            <p class="wishlist-item-author">Matt Haig</p>
+                            <div class="wishlist-item-price">$14.99</div>
+                            <div class="wishlist-item-actions">
+                                <button class="btn btn-wishlist btn-sm"><i class="fas fa-trash me-1"></i> Remove</button>
+                                <button class="btn btn-cart btn-sm"><i class="fas fa-cart-plus me-1"></i> Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="wishlist-item">
+                        <div class="wishlist-item-img">
+                            <img src="https://images-na.ssl-images-amazon.com/images/I/41SYoqJn-CL._AC_SX184_.jpg" alt="Atomic Habits">
+                        </div>
+                        <div class="wishlist-item-body">
+                            <h3 class="wishlist-item-title">Atomic Habits</h3>
+                            <p class="wishlist-item-author">James Clear</p>
+                            <div class="wishlist-item-price">$11.99</div>
+                            <div class="wishlist-item-actions">
+                                <button class="btn btn-wishlist btn-sm"><i class="fas fa-trash me-1"></i> Remove</button>
+                                <button class="btn btn-cart btn-sm"><i class="fas fa-cart-plus me-1"></i> Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="wishlist-item">
+                        <div class="wishlist-item-img">
+                            <img src="https://images-na.ssl-images-amazon.com/images/I/51j8IiHZUtL._AC_SX184_.jpg" alt="The Silent Patient">
+                        </div>
+                        <div class="wishlist-item-body">
+                            <h3 class="wishlist-item-title">The Silent Patient</h3>
+                            <p class="wishlist-item-author">Alex Michaelides</p>
+                            <div class="wishlist-item-price">$13.49</div>
+                            <div class="wishlist-item-actions">
+                                <button class="btn btn-wishlist btn-sm"><i class="fas fa-trash me-1"></i> Remove</button>
+                                <button class="btn btn-cart btn-sm"><i class="fas fa-cart-plus me-1"></i> Add to Cart</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Empty Wishlist Template -->
+    <template id="empty-wishlist-template">
+        <div class="col-12 text-center empty-state">
+            <img src="https://cdn-icons-png.flaticon.com/512/5928/5928351.png" alt="Empty Wishlist" class="empty-state-icon">
+            <h3>Your wishlist is empty</h3>
+            <p>Browse our collection and add books you love to your wishlist.</p>
+            <a href="/" class="btn btn-primary">Explore Books</a>
+        </div>
+    </template>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h3 class="footer-title">PageTurner</h3>
+                    <p>Your destination for quality books and excellent reading experiences.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <h3 class="footer-title">Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/wishlist.html">Wishlist</a></li>
+                        <li><a href="/cart.html">Cart</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-5">
+                    <h3 class="footer-title">Newsletter</h3>
+                    <p>Subscribe to our newsletter for updates on new arrivals and special offers.</p>
+                    <div class="newsletter-form">
+                        <input type="email" class="form-control" placeholder="Your email">
+                        <button class="btn btn-primary">Subscribe</button>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 PageTurner. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // This would be replaced with actual wishlist loading logic
+            const wishlistItems = document.getElementById('wishlist-items');
+            
+            // Example of how to show empty state if no items
+            if (wishlistItems.children.length === 0) {
+                const emptyTemplate = document.getElementById('empty-wishlist-template');
+                const emptyContent = emptyTemplate.content.cloneNode(true);
+                wishlistItems.appendChild(emptyContent);
+            }
+            
+            // Add event listeners for buttons
+            document.querySelectorAll('.btn-wishlist').forEach(button => {
+                button.addEventListener('click', function() {
+                    const item = this.closest('.col-lg-4');
+                    item.style.opacity = '0';
+                    setTimeout(() => {
+                        item.remove();
+                        if (document.querySelectorAll('#wishlist-items .col-lg-4').length === 0) {
+                            const emptyTemplate = document.getElementById('empty-wishlist-template');
+                            const emptyContent = emptyTemplate.content.cloneNode(true);
+                            wishlistItems.appendChild(emptyContent);
+                        }
+                    }, 300);
+                });
+            });
+            
+            document.querySelectorAll('.btn-cart').forEach(button => {
+                button.addEventListener('click', function() {
+                    alert('Book added to cart!');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
